@@ -1,11 +1,11 @@
 ---
 downloads: ~/.ansible-downloads/
 
-configure_dotfiles: yes
-configure_terminal: yes
-configure_osx: yes
+configure_dotfiles: true
+configure_terminal: true
+configure_osx: true
 
-configure_sudoers: no
+configure_sudoers: false
 sudoers_custom_config: ''
 # Example:
 # sudoers_custom_config: |
@@ -13,7 +13,7 @@ sudoers_custom_config: ''
 #   %admin ALL=(ALL) NOPASSWD: ALL
 
 dotfiles_repo: https://github.com/geerlingguy/dotfiles.git
-dotfiles_repo_accept_hostkey: yes
+dotfiles_repo_accept_hostkey: true
 dotfiles_repo_local_destination: ~/Development/GitHub/dotfiles
 dotfiles_files:
   - .zshrc
@@ -93,24 +93,6 @@ pip_packages: []
 # - name: mkdocs
 #   state: present # present/absent/latest, default: present
 #   version: "0.16.3" # default: N/A
-
-# Set to 'true' to configure Sublime Text.
-configure_sublime: false
-sublime_base_path: '~/Library/Application Support/Sublime Text'
-sublime_config_path: "Packages/User"
-sublime_package_control:
-  - "DocBlockr"
-  - "Dockerfile Syntax Highlighting"
-  - "FileDiffs"
-  - "GitHub Flavored Markdown Preview"
-  - "Jinja2"
-  - "Package Control"
-  - "PHP-Twig"
-  - "Pretty JSON"
-  - "SublimeLinter"
-  - "SublimeLinter-contrib-yamllint"
-  - "TrailingSpaces"
-  - "WordCount"
 
 # Glob pattern to ansible task files to run after all other tasks are finished.
 post_provision_tasks: []
