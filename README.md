@@ -173,10 +173,7 @@ It's my hope that I can get the rest of these things wrapped up into Ansible pla
 
 Many people have asked me if I often wipe my entire workstation and start from scratch just to test changes to the playbook. Nope! This project is [continuously tested on GitHub Actions' macOS infrastructure](https://github.com/geerlingguy/mac-dev-playbook/actions?query=workflow%3ACI).
 
-You can also run macOS itself inside a VM, for at least some of the required testing (App Store apps and some proprietary software might not install properly). I currently recommend:
-
-  - [UTM](https://mac.getutm.app)
-  - [Tart](https://github.com/cirruslabs/tart)
+Additionally, this project is [continuously tested on GitHub Actions' macOS infrastructure](https://github.com/geerlingguy/mac-dev-playbook/actions?query=workflow%3ACI).
 
 ## Ansible for DevOps
 
