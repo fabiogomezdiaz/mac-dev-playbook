@@ -1,3 +1,3 @@
 [all]
-mbpmax.fabiongo.com       ansible_user=fabiogomezdiaz
-mbpminim4.fabiongo.com       ansible_user=fabiogomezdiaz
+mbpmax.fabiongo.com    ansible_user=fabiogomezdiaz
+mbpminim4.fabiongo.com ansible_user=fabiogomezdiaz
