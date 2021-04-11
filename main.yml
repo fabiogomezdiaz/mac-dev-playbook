@@ -44,24 +44,13 @@
     - import_tasks: tasks/extra-packages.yml
       tags: ['extra-packages']
 
-<<<<<<< HEAD
-    - import_tasks: tasks/sublime-text.yml
-      when: configure_sublime
-      tags: ['sublime-text']
+    - include_tasks: tasks/dock.yml
+      when: configure_dock
+      tags: ['dock']
 
-    - name: Run post-provision task files in a block.
-      tags: ['post']
-      block:
-        - name: Run configured post-provision ansible task files.
-          include_tasks: "{{ outer_item }}"
-          loop_control:
-            loop_var: outer_item
-          with_fileglob: "{{ post_provision_tasks | default(omit) }}"
-=======
     - name: Run configured post-provision ansible task files.
       include_tasks: "{{ outer_item }}"
       loop_control:
         loop_var: outer_item
       with_fileglob: "{{ post_provision_tasks|default(omit) }}"
       tags: ['post']
->>>>>>> 7aafa6f (fixed it the way GG wants it fixed)
