@@ -4,17 +4,7 @@ configure_terminal: false
 configure_osx: true
 configure_dock: []
 
-# Set to 'true' to configure the Dock via dockutil.
-configure_dock: false
-dockitems_remove: []
-# - Launchpad
-# - TV
-# - Podcasts
-# - 'App Store'
-dockitems_persist: []
-# - name: "Sublime Text"
-#   path: "/Applications/Sublime Text.app/"
-#   pos: 5
+configure_dock: []
 
 configure_sudoers: false
 sudoers_custom_config: ""
