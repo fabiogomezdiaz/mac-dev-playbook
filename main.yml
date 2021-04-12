@@ -27,6 +27,7 @@
 
   tasks:
     - import_tasks: tasks/ansible-setup.yml
+      tags: ['setup']
 
     - import_tasks: tasks/sudoers.yml
       when: configure_sudoers
@@ -56,7 +57,7 @@
       tags: ['dock']
 
     - name: Run configured post-provision ansible task files.
-      include_tasks: "{{ outer_item }}"
+      import_tasks: "{{ outer_item }}"
       loop_control:
         loop_var: outer_item
       with_fileglob: "{{ post_provision_tasks|default(omit) }}"
