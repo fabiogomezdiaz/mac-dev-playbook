@@ -26,6 +26,9 @@
       tags: ['dock']
 
   tasks:
+    - import_tasks: tasks/ansible-setup.yml
+      tags: ['setup']
+
     - import_tasks: tasks/sudoers.yml
       when: configure_sudoers
       tags: ['sudoers']
@@ -41,6 +44,7 @@
     - import_tasks: tasks/extra-packages.yml
       tags: ['extra-packages']
 
+<<<<<<< HEAD
     - import_tasks: tasks/sublime-text.yml
       when: configure_sublime
       tags: ['sublime-text']
@@ -53,3 +57,11 @@
           loop_control:
             loop_var: outer_item
           with_fileglob: "{{ post_provision_tasks | default(omit) }}"
+=======
+    - name: Run configured post-provision ansible task files.
+      import_tasks: "{{ outer_item }}"
+      loop_control:
+        loop_var: outer_item
+      with_fileglob: "{{ post_provision_tasks|default(omit) }}"
+      tags: ['post']
+>>>>>>> 7aafa6f (fixed it the way GG wants it fixed)
