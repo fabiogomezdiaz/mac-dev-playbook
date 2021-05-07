@@ -91,6 +91,10 @@ You can override any of the defaults configured in `default.config.yml` by creat
 
     pip_packages:
       - name: mkdocs
+    
+    configure_dock: true
+    dockitems_remove: []
+    dockitems_persist: []
 
     configure_dock: true
     dockitems_remove:
