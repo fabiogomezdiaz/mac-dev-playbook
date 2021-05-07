@@ -81,6 +81,10 @@ homebrew_installed_packages:
 
     pip_packages:
       - name: mkdocs
+    
+    configure_dock: true
+    dockitems_remove: []
+    dockitems_persist: []
 
     configure_dock: true
     dockitems_remove: []
