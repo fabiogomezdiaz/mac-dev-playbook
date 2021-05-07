@@ -106,7 +106,6 @@ pip_packages: []
 #   state: present # present/absent/latest, default: present
 #   version: "0.16.3" # default: N/A
 
-<<<<<<< HEAD
 # Set to 'true' to configure Sublime Text.
 configure_sublime: false
 sublime_base_path: "~/Library/Application Support/Sublime Text"
@@ -125,7 +124,5 @@ sublime_package_control:
   - "TrailingSpaces"
   - "WordingStatus"
 
-=======
->>>>>>> 8b9e26d (Fix lint issues and dump Travis CI. Try out GitHub Actions instead.)
 # Glob pattern to ansible task files to run after all other tasks are finished.
 post_provision_tasks: []

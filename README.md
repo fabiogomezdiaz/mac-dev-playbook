@@ -56,41 +56,42 @@ Not everyone's development environment and preferred software configuration is t
 
 You can override any of the defaults configured in `default.config.yml` by creating a `config.yml` file and setting the overrides in that file. For example, you can customize the installed packages and apps with something like:
 
+<<<<<<< HEAD
 ```yaml
 homebrew_installed_packages:
   - git
   - go
+=======
+    homebrew_installed_packages:
+      - cowsay
+      - git
+      - go
+>>>>>>> 08bc9ee (PR #106 follow-up: More consistent docs and examples.)
 
-mas_installed_apps:
-  - { id: 443987910, name: "1Password" }
-  - { id: 498486288, name: "Quick Resizer" }
-  - { id: 557168941, name: "Tweetbot" }
-  - { id: 497799835, name: "Xcode" }
+    mas_installed_apps:
+      - { id: 443987910, name: "1Password" }
+      - { id: 498486288, name: "Quick Resizer" }
+      - { id: 557168941, name: "Tweetbot" }
+      - { id: 497799835, name: "Xcode" }
 
-composer_packages:
-  - name: hirak/prestissimo
-  - name: drush/drush
-    version: '^8.1'
+    composer_packages:
+      - name: hirak/prestissimo
+      - name: drush/drush
+        version: '^8.1'
 
-gem_packages:
-  - name: bundler
-    state: latest
+    gem_packages:
+      - name: bundler
+        state: latest
 
-npm_packages:
-  - name: webpack
+    npm_packages:
+      - name: webpack
 
-pip_packages:
-  - name: mkdocs
+    pip_packages:
+      - name: mkdocs
 
-configure_dock: true
-dockitems_remove:
-  - Launchpad
-  - TV
-dockitems_persist:
-  - name: "Sublime Text"
-    path: "/Applications/Sublime Text.app/"
-    pos: 5
-```
+    configure_dock: true
+    dockitems_remove: []
+    dockitems_persist: []
 
 Any variable can be overridden in `config.yml`; see the supporting roles' documentation for a complete list of available variables.
 
