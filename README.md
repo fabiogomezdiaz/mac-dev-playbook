@@ -56,17 +56,10 @@ Not everyone's development environment and preferred software configuration is t
 
 You can override any of the defaults configured in `default.config.yml` by creating a `config.yml` file and setting the overrides in that file. For example, you can customize the installed packages and apps with something like:
 
-<<<<<<< HEAD
 ```yaml
 homebrew_installed_packages:
   - git
   - go
-=======
-    homebrew_installed_packages:
-      - cowsay
-      - git
-      - go
->>>>>>> 08bc9ee (PR #106 follow-up: More consistent docs and examples.)
 
     mas_installed_apps:
       - { id: 443987910, name: "1Password" }
@@ -137,8 +130,6 @@ Packages (installed with Homebrew):
   - openssl
   - pv
   - wget
-  - wrk
-  - zsh-history-substring-search
 
 My [dotfiles](https://github.com/geerlingguy/dotfiles) are also installed into the current user's home directory, including the `.osx` dotfile for configuring many aspects of macOS for better performance and ease of use. You can disable dotfiles management by setting `configure_dotfiles: no` in your configuration.
 
