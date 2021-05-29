@@ -18,7 +18,17 @@ This is a work in progress, and is mostly a means for me to document my current 
 ## Installation
 
   1. Ensure Apple's command line tools are installed (`xcode-select --install` to launch the installer).
-  2. [Install Ansible](http://docs.ansible.com/intro_installation.html).
+  2. [Install Ansible](https://docs.ansible.com/ansible/latest/installation_guide/index.html):
+
+     1. Add the following to your `~/.zshrc` file (create one if you don't have one):
+
+        ```
+        export PATH="$HOME/Library/Python/3.8/bin:/opt/homebrew/bin:$PATH"
+        ```
+
+     2. Source the new profile: `source ~/.zshrc`
+     3. Install Ansible: `pip3 install ansible`
+
   3. Clone this repository to your local drive.
   4. Run `$ ansible-galaxy install -r requirements.yml` inside this directory to install required Ansible roles.
   5. Run `ansible-playbook main.yml --ask-become-pass` inside this directory. Enter your account password when prompted.
@@ -61,34 +71,36 @@ homebrew_installed_packages:
   - git
   - go
 
-    mas_installed_apps:
-      - { id: 443987910, name: "1Password" }
-      - { id: 498486288, name: "Quick Resizer" }
-      - { id: 557168941, name: "Tweetbot" }
-      - { id: 497799835, name: "Xcode" }
+mas_installed_apps:
+  - { id: 443987910, name: "1Password" }
+  - { id: 498486288, name: "Quick Resizer" }
+  - { id: 557168941, name: "Tweetbot" }
+  - { id: 497799835, name: "Xcode" }
 
-    composer_packages:
-      - name: hirak/prestissimo
-      - name: drush/drush
-        version: '^8.1'
+composer_packages:
+  - name: hirak/prestissimo
+  - name: drush/drush
+    version: '^8.1'
 
-    gem_packages:
-      - name: bundler
-        state: latest
+gem_packages:
+  - name: bundler
+    state: latest
 
-    npm_packages:
-      - name: webpack
+npm_packages:
+  - name: webpack
 
-    pip_packages:
-      - name: mkdocs
-    
-    configure_dock: true
-    dockitems_remove: []
-    dockitems_persist: []
+pip_packages:
+  - name: mkdocs
 
-    configure_dock: true
-    dockitems_remove: []
-    dockitems_persist: []
+configure_dock: true
+dockitems_remove:
+  - Launchpad
+  - TV
+dockitems_persist:
+  - name: "Sublime Text"
+    path: "/Applications/Sublime Text.app/"
+    pos: 5
+```
 
 Any variable can be overridden in `config.yml`; see the supporting roles' documentation for a complete list of available variables.
 
@@ -177,7 +189,7 @@ Check out [Ansible for DevOps](https://www.ansiblefordevops.com/), which teaches
 
 ## Author
 
-[Jeff Geerling](https://www.jeffgeerling.com/), 2014 (originally inspired by [MWGriffin/ansible-playbooks](https://github.com/MWGriffin/ansible-playbooks)).
+This project was created by [Jeff Geerling](https://www.jeffgeerling.com/) (originally inspired by [MWGriffin/ansible-playbooks](https://github.com/MWGriffin/ansible-playbooks)).
 
 [badge-gh-actions]: https://github.com/geerlingguy/mac-dev-playbook/actions/workflows/ci.yml/badge.svg
 [link-gh-actions]: https://github.com/geerlingguy/mac-dev-playbook/actions/workflows/ci.yml

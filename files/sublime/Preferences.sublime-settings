@@ -301,9 +301,7 @@
     "*.jar",
     "*.zip"
   ],
-  "close_windows_when_empty": true,
-  "color_scheme": "Packages/Theme - Cobalt2/cobalt2.tmTheme",
-  "create_window_at_startup": false,
+  "color_scheme": "Packages/User/Cobalt (SL).tmTheme",
   "detect_indentation": true,
   "draw_minimap_border": false,
   "draw_white_space": "selection",
