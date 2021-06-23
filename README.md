@@ -109,6 +109,7 @@ Applications (installed with Homebrew Cask):
   - [LICEcap](http://www.cockos.com/licecap/)
   - [nvALT](http://brettterpstra.com/projects/nvalt/)
   - [Sequel Ace](https://sequel-ace.com) (MySQL client)
+  - [Skitch](https://evernote.com/skitch/)
   - [Slack](https://slack.com/)
   - [Sublime Text](https://www.sublimetext.com/)
   - [Transmit](https://panic.com/transmit/) (S/FTP client)
