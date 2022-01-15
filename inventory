@@ -1,3 +1,5 @@
 [all]
-#127.0.0.1  ansible_connection=local
-macmini.fabiongo.com  ansible_user=fabiogomezdiaz
+mbp.fabiongo.com       ansible_connection=fabiogomezdiaz
+macmini.fabiongo.com   ansible_user=fabiogomezdiaz
+accenture.fabiongo.com ansible_user=fabio.gomez.diaz
+skillz.fabiongo.com    ansible_user=fabiogomezdiaz
