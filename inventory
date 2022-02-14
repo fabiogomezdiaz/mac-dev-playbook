@@ -1,5 +1,5 @@
 [all]
-mbp.fabiongo.com            ansible_user=fabiogomezdiaz
-macmini-wifi.fabiongo.com   ansible_user=fabiogomezdiaz
-accenture.fabiongo.com      ansible_user=fabio.gomez.diaz
-skillz.fabiongo.com         ansible_user=fabiogomezdiaz
+mbp.fabiongo.com       ansible_user=fabiogomezdiaz
+macmini.fabiongo.com   ansible_user=fabiogomezdiaz
+accenture.fabiongo.com ansible_user=fabio.gomez.diaz
+skillz.fabiongo.com    ansible_user=fabiogomezdiaz
