@@ -19,6 +19,8 @@
       when: configure_dotfiles
       tags: ['dotfiles']
     - role: geerlingguy.mac.mas
+      environment:
+        PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_env.PATH }}"
       when: mas_installed_apps or mas_installed_app_ids
       tags: ['mas']
     - role: geerlingguy.mac.dock
