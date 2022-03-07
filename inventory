@@ -3,3 +3,12 @@ mbp.fabiongo.com       ansible_user=fabiogomezdiaz
 macmini.fabiongo.com   ansible_user=fabiogomezdiaz
 accenture.fabiongo.com ansible_user=fabio.gomez.diaz
 skillz.fabiongo.com    ansible_user=fabiogomezdiaz
+
+[arm]
+mbp.fabiongo.com       ansible_user=fabiogomezdiaz
+
+[x86]
+mbp.fabiongo.com       ansible_user=fabiogomezdiaz
+macmini.fabiongo.com   ansible_user=fabiogomezdiaz
+accenture.fabiongo.com ansible_user=fabio.gomez.diaz
+skillz.fabiongo.com    ansible_user=fabiogomezdiaz
