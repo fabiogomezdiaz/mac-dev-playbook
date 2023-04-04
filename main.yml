@@ -31,9 +31,9 @@
     #- import_tasks: tasks/oh-my-zsh.yml
     #  tags: ['oh-my-zsh']
 
-    # - import_tasks: tasks/sudoers.yml
-    #   when: configure_sudoers
-    #   tags: ['sudoers']
+    - import_tasks: tasks/sudoers.yml
+      when: configure_sudoers
+      tags: ['sudoers']
 
     - import_tasks: tasks/terminal.yml
       when: configure_terminal
