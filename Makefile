@@ -21,17 +21,37 @@ check-syntax:
 ########
 home:
 	@echo "Running playbook..."
-	@time ANSIBLE_CONFIG="$(pwd)/$(CONFIG_HOME)" ansible-playbook $(PLAYBOOK) --inventory=$(INVENTORY) -l home --ask-become-pass
+	@time ANSIBLE_CONFIG="$(pwd)/$(CONFIG_HOME)" ansible-playbook $(PLAYBOOK) --inventory=$(INVENTORY) -l mbpmax --ask-become-pass
 	@echo "Playbook execution completed."
 
 home-homebrew:
 	@echo "Running playbook..."
-	@time ANSIBLE_CONFIG="$(pwd)/$(CONFIG_HOME)" ansible-playbook $(PLAYBOOK) --inventory=$(INVENTORY) -l home --ask-become-pass --tags homebrew
+	@time ANSIBLE_CONFIG="$(pwd)/$(CONFIG_HOME)" ansible-playbook $(PLAYBOOK) --inventory=$(INVENTORY) -l mbpmax --ask-become-pass --tags homebrew
 	@echo "Playbook execution completed."
 
 home-dotfiles:
 	@echo "Running playbook..."
-	@time ANSIBLE_CONFIG="$(pwd)/$(CONFIG_HOME)" ansible-playbook $(PLAYBOOK) --inventory=$(INVENTORY) -l home --ask-become-pass --tags dotfiles
+	@time ANSIBLE_CONFIG="$(pwd)/$(CONFIG_HOME)" ansible-playbook $(PLAYBOOK) --inventory=$(INVENTORY) -l mbpmax --ask-become-pass --tags dotfiles
+	@echo "Playbook execution completed."
+	@echo "Syntax check passed."
+	@echo "Syntax check passed."
+
+############
+# MAC MINI #
+############
+macmini:
+	@echo "Running playbook..."
+	@time ANSIBLE_CONFIG="$(pwd)/$(CONFIG_HOME)" ansible-playbook $(PLAYBOOK) --inventory=$(INVENTORY) -l macmini --ask-become-pass
+	@echo "Playbook execution completed."
+
+macmini-homebrew:
+	@echo "Running playbook..."
+	@time ANSIBLE_CONFIG="$(pwd)/$(CONFIG_HOME)" ansible-playbook $(PLAYBOOK) --inventory=$(INVENTORY) -l macmini --ask-become-pass --tags homebrew
+	@echo "Playbook execution completed."
+
+macmini-dotfiles:
+	@echo "Running playbook..."
+	@time ANSIBLE_CONFIG="$(pwd)/$(CONFIG_HOME)" ansible-playbook $(PLAYBOOK) --inventory=$(INVENTORY) -l macmini --ask-become-pass --tags dotfiles
 	@echo "Playbook execution completed."
 	@echo "Syntax check passed."
 
