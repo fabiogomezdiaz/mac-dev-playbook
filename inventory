@@ -1,15 +1,9 @@
 [home]
-macmini.fabiongo.com   ansible_user=fabiogomezdiaz
-mbpmax.fabiongo.com    ansible_user=fabiogomezdiaz
+# mbpmax.fabiongo.com    ansible_user=fabiogomezdiaz
+instacart.fabiongo.com   ansible_user=fabiogomezdiaz
 
-[mbpmax]
-mbpmax.fabiongo.com    ansible_user=fabiogomezdiaz
+#[mbpmax]
+#mbpmax.fabiongo.com    ansible_user=fabiogomezdiaz
 
-[macmini]
-macmini.fabiongo.com   ansible_user=fabiogomezdiaz
-
-[accenture]
-accenture.fabiongo.com ansible_user=fabio.gomez.diaz
-
-[eplexity]
-eplexity.fabiongo.com  ansible_user=fabiogomezdiaz
+#[macmini]
+#macmini.fabiongo.com   ansible_user=fabiogomezdiaz

@@ -2,7 +2,7 @@
 
 # Variables
 CONFIG_ACCENTURE = config-accenture.yml
-CONFIG_EPLEXITY = config-eplexity.yml
+CONFIG_INSTACART = config-instacart.yml
 CONFIG_HOME = config-home.yml
 INVENTORY = inventory
 PLAYBOOK = main.yml
@@ -15,6 +15,24 @@ check-syntax:
 	@echo "Checking playbook syntax..."
 	@ansible-playbook $(PLAYBOOK) --inventory=$(INVENTORY) --syntax-check
 	@echo "Syntax check passed."
+
+#######
+# ALL #
+#######
+all:
+	@echo "Running playbook..."
+	@time ansible-playbook $(PLAYBOOK) --inventory=$(INVENTORY) --ask-become-pass
+	@echo "Playbook execution completed."
+
+all-homebrew:
+	@echo "Running playbook..."
+	@time ansible-playbook $(PLAYBOOK) --inventory=$(INVENTORY) --ask-become-pass --tags homebrew
+	@echo "Playbook execution completed."
+
+all-dotfiles:
+	@echo "Running playbook..."
+	@time ansible-playbook $(PLAYBOOK) --inventory=$(INVENTORY) --ask-become-pass --tags dotfiles
+	@echo "Playbook execution completed."
 
 ########
 # HOME #
@@ -75,19 +93,19 @@ accenture-dotfiles:
 
 
 ############
-# EPLEXITY #
+# INSTACART #
 ############
-eplexity:
+instacart:
 	@echo "Running playbook..."
-	@time ANSIBLE_CONFIG="$(pwd)/$(CONFIG_EPLEXITY)" ansible-playbook $(PLAYBOOK) --inventory=$(INVENTORY) -l eplexity --ask-become-pass
+	@time ansible-playbook $(PLAYBOOK) --inventory=$(INVENTORY) -l instacart --ask-become-pass
 	@echo "Playbook execution completed."
 
-eplexity-homebrew:
+instacart-homebrew:
 	@echo "Running playbook..."
-	@time ANSIBLE_CONFIG="$(pwd)/$(CONFIG_EPLEXITY)" ansible-playbook $(PLAYBOOK) --inventory=$(INVENTORY) -l eplexity --ask-become-pass --tags homebrew
+	@time ansible-playbook $(PLAYBOOK) --inventory=$(INVENTORY) -l instacart --ask-become-pass --tags homebrew
 	@echo "Playbook execution completed."
 
-eplexity-dotfiles:
+instacart-dotfiles:
 	@echo "Running playbook..."
-	@time ANSIBLE_CONFIG="$(pwd)/$(CONFIG_EPLEXITY)" ansible-playbook $(PLAYBOOK) --inventory=$(INVENTORY) -l eplexity --ask-become-pass --tags dotfiles
+	@time ansible-playbook $(PLAYBOOK) --inventory=$(INVENTORY) -l instacart --ask-become-pass --tags dotfiles
 	@echo "Playbook execution completed."
