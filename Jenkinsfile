@@ -34,7 +34,7 @@ pipeline {
     stage('Galaxy deps') {
       steps {
         sh '''
-          set -euxo pipefail
+          set -eux pipefail
           test -f requirements.yml && ansible-galaxy install -r requirements.yml --force || echo "No requirements.yml; skipping."
         '''
       }
