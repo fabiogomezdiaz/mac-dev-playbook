@@ -1,9 +1,9 @@
-// Jenkinsfile (Docker agent with Ansible preinstalled)
+// Jenkinsfile (Docker agent with Ansible preinstalled; no sshagent)
 pipeline {
   agent {
     docker {
       image 'geerlingguy/docker-ubuntu2404-ansible:latest'
-      args '-u root:root'     // avoid perms issues writing temp files / SSH keys
+      args '-u root:root'
       reuseNode true
     }
   }
@@ -25,7 +25,7 @@ pipeline {
     stage('Galaxy deps') {
       steps {
         sh '''
-          set -eux pipefail
+          set -euo pipefail
           test -f requirements.yml && ansible-galaxy install -r requirements.yml --force || echo "No requirements.yml; skipping."
         '''
       }
@@ -33,19 +33,22 @@ pipeline {
 
     stage('Run mac-dev-playbook') {
       steps {
-        sshagent(['mac-ssh']) {
-          ansiblePlaybook(
-            playbook: 'main.yml',
-            inventory: 'inventory',
-            colorized: true,
-            checkMode: params.CHECK_MODE,
-            // Jenkins SSH private key for your macOS user:
-            credentialsId: 'mac-ssh',
-            disableHostKeyChecking: true,
-            extras: '--diff',
-            extraVars: [ ansible_python_interpreter: '/usr/bin/python3' ],
-            tags: params.TAGS
-          )
+        withCredentials([
+          sshUserPrivateKey(credentialsId: 'mac-ssh', keyFileVariable: 'SSH_KEY_FILE', usernameVariable: 'SSH_USER'),
+          string(credentialsId: 'mac-become-password', variable: 'BECOME_PASSWORD')
+        ]) {
+          sh '''
+            set -euo pipefail
+            ansible-playbook main.yml \
+              --inventory inventory \
+              --private-key "${SSH_KEY_FILE}" \
+              --user "${SSH_USER}" \
+              --become-password-file <(echo "${BECOME_PASSWORD}") \
+              --become \
+              --become-user root \
+              --diff \
+              --extra-vars "ansible_python_interpreter=/usr/bin/python3"
+          '''
         }
       }
     }
