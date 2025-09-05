@@ -27,7 +27,7 @@ pipeline {
     stage('Install SSH client') {
       steps {
         sh '''
-          set -euo pipefail
+          set -eu pipefail
           export DEBIAN_FRONTEND=noninteractive
           apt-get update
           apt-get install -y --no-install-recommends openssh-client
@@ -40,7 +40,7 @@ pipeline {
     stage('Galaxy deps') {
       steps {
         sh '''
-          set -euo pipefail
+          set -eu pipefail
           if [ -f requirements.yml ]; then
             ansible-galaxy install -r requirements.yml --force
           else
@@ -57,7 +57,7 @@ pipeline {
           string(credentialsId: 'mac-become-password', variable: 'BECOME_PASSWORD')
         ]) {
           sh '''
-            set -euo pipefail
+            set -eu pipefail
 
             # Create a temporary become password file (keeps secret out of argv/env)
             BECOME_PASS_FILE="$(mktemp)"
