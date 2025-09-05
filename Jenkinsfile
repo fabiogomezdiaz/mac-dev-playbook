@@ -41,29 +41,19 @@ pipeline {
     }
 
     stage('Run mac-dev-playbook') {
-      matrix {
-        axes {
-          axis { name 'TARGET'; values 'macbook_pro', 'macmini' }  // must match names in your inventory
-        }
-        stages {
-          stage('Ansible') {
-            steps {
-              ansiblePlaybook(
-                playbook: 'main.yml',
-                inventory: 'inventory',
-                limit: "${TARGET}",
-                colorized: true,
-                checkMode: params.CHECK_MODE,
-                // Jenkins SSH private key for your macOS user:
-                credentialsId: 'mac-ssh',
-                disableHostKeyChecking: true,
-                extras: '--diff',
-                extraVars: [ ansible_python_interpreter: '/usr/bin/python3' ],
-                tags: params.TAGS
-              )
-            }
-          }
-        }
+      steps {
+        ansiblePlaybook(
+          playbook: 'main.yml',
+          inventory: 'inventory',
+          colorized: true,
+          checkMode: params.CHECK_MODE,
+          // Jenkins SSH private key for your macOS user:
+          credentialsId: 'mac-ssh',
+          disableHostKeyChecking: true,
+          extras: '--diff',
+          extraVars: [ ansible_python_interpreter: '/usr/bin/python3' ],
+          tags: params.TAGS
+        )
       }
     }
   }
