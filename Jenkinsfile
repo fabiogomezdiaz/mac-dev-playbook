@@ -58,11 +58,16 @@ pipeline {
     stage('Run mac-dev-playbook') {
       steps {
         withCredentials([
+          file(credentialsId: 'mac-dev-playbook-config', variable: 'CONFIG_FILE')
           sshUserPrivateKey(credentialsId: 'mac-ssh', keyFileVariable: 'SSH_KEY_FILE', usernameVariable: 'SSH_USER'),
-          string(credentialsId: 'mac-become-password', variable: 'BECOME_PASSWORD')
+          string(credentialsId: 'mac-become-password', variable: 'BECOME_PASSWORD'),
         ]) {
           sh '''
             set -eu pipefail
+
+            # Copy config file from Jenkins credentials to repo root
+            cp "${CONFIG_FILE}" ./config.yml
+            echo "Config file copied to repo root"
 
             # Start SSH agent and add the private key
             eval "$(ssh-agent -s)"
