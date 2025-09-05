@@ -39,15 +39,24 @@ pipeline {
         ]) {
           sh '''
             set -eu pipefail
+            # Create temporary password file
+            BECOME_PASS_FILE=$(mktemp)
+            echo "${BECOME_PASSWORD}" > "${BECOME_PASS_FILE}"
+            chmod 600 "${BECOME_PASS_FILE}"
+
+            # Run ansible-playbook
             ansible-playbook main.yml \
               --inventory inventory \
               --private-key "${SSH_KEY_FILE}" \
               --user "${SSH_USER}" \
-              --become-password-file <(echo "${BECOME_PASSWORD}") \
+              --become-password-file "${BECOME_PASS_FILE}" \
               --become \
               --become-user root \
               --diff \
               --extra-vars "ansible_python_interpreter=/usr/bin/python3"
+
+            # Clean up password file
+            rm -f "${BECOME_PASS_FILE}"
           '''
         }
       }
