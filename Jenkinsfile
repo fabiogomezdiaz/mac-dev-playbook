@@ -58,9 +58,9 @@ pipeline {
     stage('Run mac-dev-playbook') {
       steps {
         withCredentials([
-          file(credentialsId: 'mac-dev-playbook-config', variable: 'CONFIG_FILE')
+          file(credentialsId: 'mac-dev-playbook-config', variable: 'CONFIG_FILE'),
           sshUserPrivateKey(credentialsId: 'mac-ssh', keyFileVariable: 'SSH_KEY_FILE', usernameVariable: 'SSH_USER'),
-          string(credentialsId: 'mac-become-password', variable: 'BECOME_PASSWORD'),
+          string(credentialsId: 'mac-become-password', variable: 'BECOME_PASSWORD')
         ]) {
           sh '''
             set -eu pipefail
