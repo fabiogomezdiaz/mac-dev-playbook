@@ -29,18 +29,6 @@ pipeline {
       steps { checkout scm }
     }
 
-    stage('DNS sanity') {
-      steps {
-        sh '''
-          set -eu pipefail
-          cat /etc/resolv.conf
-          apt-get update && apt-get install -y --no-install-recommends dnsutils >/dev/null
-          nslookup mbpmax.fabiongo.com
-          nslookup mbpminim4.fabiongo.com
-        '''
-      }
-    }
-
     stage('Install SSH client') {
       steps {
         sh '''
