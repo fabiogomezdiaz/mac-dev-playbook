@@ -22,15 +22,6 @@ pipeline {
       steps { checkout scm }
     }
 
-    // stage('Ensure ssh client in container') {
-    //   steps {
-    //     sh '''
-    //       set -euxo pipefail
-    //       command -v ssh >/dev/null 2>&1 || (apt-get update && apt-get install -y --no-install-recommends openssh-client)
-    //     '''
-    //   }
-    // }
-
     stage('Galaxy deps') {
       steps {
         sh '''
@@ -42,18 +33,20 @@ pipeline {
 
     stage('Run mac-dev-playbook') {
       steps {
-        ansiblePlaybook(
-          playbook: 'main.yml',
-          inventory: 'inventory',
-          colorized: true,
-          checkMode: params.CHECK_MODE,
-          // Jenkins SSH private key for your macOS user:
-          credentialsId: 'mac-ssh',
-          disableHostKeyChecking: true,
-          extras: '--diff',
-          extraVars: [ ansible_python_interpreter: '/usr/bin/python3' ],
-          tags: params.TAGS
-        )
+        sshagent(['mac-ssh']) {
+          ansiblePlaybook(
+            playbook: 'main.yml',
+            inventory: 'inventory',
+            colorized: true,
+            checkMode: params.CHECK_MODE,
+            // Jenkins SSH private key for your macOS user:
+            credentialsId: 'mac-ssh',
+            disableHostKeyChecking: true,
+            extras: '--diff',
+            extraVars: [ ansible_python_interpreter: '/usr/bin/python3' ],
+            tags: params.TAGS
+          )
+        }
       }
     }
   }
