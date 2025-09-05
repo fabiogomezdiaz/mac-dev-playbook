@@ -1,4 +1,4 @@
-// Jenkinsfile (Docker agent with Ansible preinstalled; no sshagent)
+// Jenkinsfile (Docker agent with Ansible preinstalled; force-install ssh client)
 pipeline {
   agent {
     docker {
@@ -12,6 +12,8 @@ pipeline {
     ANSIBLE_CONFIG = "${WORKSPACE}/ansible.cfg"
     ANSIBLE_STDOUT_CALLBACK = 'yaml'
     ANSIBLE_FORCE_COLOR = 'true'
+    // Belt & suspenders: make sure common bins are on PATH
+    PATH = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${PATH}"
   }
   parameters {
     string(name: 'TAGS', defaultValue: '', description: 'Optional Ansible tags (comma-separated)')
@@ -22,11 +24,28 @@ pipeline {
       steps { checkout scm }
     }
 
+    stage('Install SSH client') {
+      steps {
+        sh '''
+          set -euo pipefail
+          export DEBIAN_FRONTEND=noninteractive
+          apt-get update
+          apt-get install -y --no-install-recommends openssh-client
+          which ssh
+          ssh -V || true
+        '''
+      }
+    }
+
     stage('Galaxy deps') {
       steps {
         sh '''
-          set -eu pipefail
-          test -f requirements.yml && ansible-galaxy install -r requirements.yml --force || echo "No requirements.yml; skipping."
+          set -euo pipefail
+          if [ -f requirements.yml ]; then
+            ansible-galaxy install -r requirements.yml --force
+          else
+            echo "No requirements.yml; skipping."
+          fi
         '''
       }
     }
@@ -38,24 +57,28 @@ pipeline {
           string(credentialsId: 'mac-become-password', variable: 'BECOME_PASSWORD')
         ]) {
           sh '''
-            set -eu pipefail
-            # Create temporary password file
-            BECOME_PASS_FILE=$(mktemp)
-            echo "${BECOME_PASSWORD}" > "${BECOME_PASS_FILE}"
+            set -euo pipefail
+
+            # Create a temporary become password file (keeps secret out of argv/env)
+            BECOME_PASS_FILE="$(mktemp)"
+            printf '%s' "${BECOME_PASSWORD}" > "${BECOME_PASS_FILE}"
             chmod 600 "${BECOME_PASS_FILE}"
 
-            # Run ansible-playbook
+            # Optional preflight: quick connectivity check (comment out if noisy)
+            # ansible -i inventory all -m ping -u "${SSH_USER}" --private-key "${SSH_KEY_FILE}" -vv || true
+
+            # Run playbook
             ansible-playbook main.yml \
               --inventory inventory \
               --private-key "${SSH_KEY_FILE}" \
               --user "${SSH_USER}" \
+              --become --become-user root \
               --become-password-file "${BECOME_PASS_FILE}" \
-              --become \
-              --become-user root \
               --diff \
-              --extra-vars "ansible_python_interpreter=/usr/bin/python3"
+              --extra-vars "ansible_python_interpreter=/usr/bin/python3" \
+              ${CHECK_MODE:+--check} \
+              ${TAGS:+--tags "${TAGS}"}
 
-            # Clean up password file
             rm -f "${BECOME_PASS_FILE}"
           '''
         }
