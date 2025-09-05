@@ -73,17 +73,24 @@ pipeline {
             printf '%s' "${BECOME_PASSWORD}" > "${BECOME_PASS_FILE}"
             chmod 600 "${BECOME_PASS_FILE}"
 
-            # Optional preflight: quick connectivity check (comment out if noisy)
-            # ansible -i inventory all -m ping -u "${SSH_USER}" -vv || true
+            # Preflight: SSH connectivity check with host key verification disabled
+            echo "Testing SSH connectivity..."
+            for host in mbpmax.fabiongo.com macminim4.fabiongo.com; do
+              echo "Testing connection to $host..."
+              ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=10 "${SSH_USER}@${host}" "echo 'SSH connection successful to $host'" || {
+                echo "SSH connection failed to $host"
+                exit 1
+              }
+            done
 
             # Run playbook (no need for --private-key since it's in SSH agent)
             ansible-playbook main.yml \
               --inventory inventory \
-              --user "${SSH_USER}" \
               --become --become-user root \
               --become-password-file "${BECOME_PASS_FILE}" \
               --diff \
               --extra-vars "ansible_python_interpreter=/usr/bin/python3" \
+              --ssh-common-args "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
               ${CHECK_MODE:+--check} \
               ${TAGS:+--tags "${TAGS}"}
 
