@@ -1,12 +1,14 @@
-// Jenkinsfile
+// Jenkinsfile (Docker agent with Ansible preinstalled)
 pipeline {
-  agent any
-  options {
-    ansiColor('xterm')
-    timestamps()
+  agent {
+    docker {
+      image 'geerlingguy/docker-ubuntu2404-ansible:latest'
+      args '-u root:root'     // avoid perms issues writing temp files / SSH keys
+      reuseNode true
+    }
   }
+  options { ansiColor('xterm'); timestamps() }
   environment {
-    // Use the repo's Ansible config (if present)
     ANSIBLE_CONFIG = "${WORKSPACE}/ansible.cfg"
     ANSIBLE_STDOUT_CALLBACK = 'yaml'
     ANSIBLE_FORCE_COLOR = 'true'
@@ -20,42 +22,44 @@ pipeline {
       steps { checkout scm }
     }
 
+    // stage('Ensure ssh client in container') {
+    //   steps {
+    //     sh '''
+    //       set -euxo pipefail
+    //       command -v ssh >/dev/null 2>&1 || (apt-get update && apt-get install -y --no-install-recommends openssh-client)
+    //     '''
+    //   }
+    // }
+
     stage('Galaxy deps') {
       steps {
-        // Requires Ansible on PATH (configure as a Jenkins tool or install on the agent)
-        sh 'ansible-galaxy install -r requirements.yml'
+        sh '''
+          set -euxo pipefail
+          test -f requirements.yml && ansible-galaxy install -r requirements.yml --force || echo "No requirements.yml; skipping."
+        '''
       }
     }
 
     stage('Run mac-dev-playbook') {
       matrix {
         axes {
-          // These MUST match hostnames you define in your inventory file
-          axis { name 'TARGET'; values 'macbook_pro', 'macmini' }
+          axis { name 'TARGET'; values 'macbook_pro', 'macmini' }  // must match names in your inventory
         }
         stages {
           stage('Ansible') {
             steps {
               ansiblePlaybook(
-                playbook: 'main.yml',      // repo entrypoint
-                inventory: 'inventory',    // repo inventory
-                limit: "${TARGET}",        // run per host
+                playbook: 'main.yml',
+                inventory: 'inventory',
+                limit: "${TARGET}",
                 colorized: true,
                 checkMode: params.CHECK_MODE,
-                // Jenkins credentials: SSH private key for the Mac user
+                // Jenkins SSH private key for your macOS user:
                 credentialsId: 'mac-ssh',
-                // Name of the Ansible "installation" configured in Jenkins tools
-                installation: 'Ansible',
-                // Avoid interactive host key prompts on first connect
                 disableHostKeyChecking: true,
-                // Nice to have: see changes in the log
                 extras: '--diff',
-                // Helpful on macOS where Python 3 is /usr/bin/python3
                 extraVars: [ ansible_python_interpreter: '/usr/bin/python3' ],
-                // Optional: run a subset of tasks (e.g., "homebrew,mas")
                 tags: params.TAGS
-                // If you use Ansible Vault for MAS creds, you can also set:
-                // vaultCredentialsId: 'ansible-vault-pass'
               )
             }
           }
