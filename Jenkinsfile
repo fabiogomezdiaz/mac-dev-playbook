@@ -64,18 +64,21 @@ pipeline {
           sh '''
             set -eu pipefail
 
+            # Start SSH agent and add the private key
+            eval "$(ssh-agent -s)"
+            ssh-add "${SSH_KEY_FILE}"
+
             # Create a temporary become password file (keeps secret out of argv/env)
             BECOME_PASS_FILE="$(mktemp)"
             printf '%s' "${BECOME_PASSWORD}" > "${BECOME_PASS_FILE}"
             chmod 600 "${BECOME_PASS_FILE}"
 
             # Optional preflight: quick connectivity check (comment out if noisy)
-            # ansible -i inventory all -m ping -u "${SSH_USER}" --private-key "${SSH_KEY_FILE}" -vv || true
+            # ansible -i inventory all -m ping -u "${SSH_USER}" -vv || true
 
-            # Run playbook
+            # Run playbook (no need for --private-key since it's in SSH agent)
             ansible-playbook main.yml \
               --inventory inventory \
-              --private-key "${SSH_KEY_FILE}" \
               --user "${SSH_USER}" \
               --become --become-user root \
               --become-password-file "${BECOME_PASS_FILE}" \
@@ -84,6 +87,8 @@ pipeline {
               ${CHECK_MODE:+--check} \
               ${TAGS:+--tags "${TAGS}"}
 
+            # Clean up
+            ssh-agent -k || true
             rm -f "${BECOME_PASS_FILE}"
           '''
         }
