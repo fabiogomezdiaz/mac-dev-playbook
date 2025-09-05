@@ -3,7 +3,12 @@ pipeline {
   agent {
     docker {
       image 'geerlingguy/docker-ubuntu2404-ansible:latest'
-      args '-u root:root'
+      args """
+        -u root:root \
+        --dns 192.168.3.1 \
+        --dns 192.168.2.2 \
+        --dns-search fabiongo.com
+      """
       reuseNode true
     }
   }
@@ -22,6 +27,18 @@ pipeline {
   stages {
     stage('Checkout') {
       steps { checkout scm }
+    }
+
+    stage('DNS sanity') {
+      steps {
+        sh '''
+          set -euo pipefail
+          cat /etc/resolv.conf
+          apt-get update && apt-get install -y --no-install-recommends dnsutils >/dev/null
+          nslookup mbpmax.fabiongo.com
+          nslookup mbpminim4.fabiongo.com
+        '''
+      }
     }
 
     stage('Install SSH client') {
