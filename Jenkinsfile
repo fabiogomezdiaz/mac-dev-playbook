@@ -32,7 +32,7 @@ pipeline {
     stage('DNS sanity') {
       steps {
         sh '''
-          set -euo pipefail
+          set -eu pipefail
           cat /etc/resolv.conf
           apt-get update && apt-get install -y --no-install-recommends dnsutils >/dev/null
           nslookup mbpmax.fabiongo.com
