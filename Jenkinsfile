@@ -25,7 +25,7 @@ pipeline {
     stage('Galaxy deps') {
       steps {
         sh '''
-          set -euo pipefail
+          set -eu pipefail
           test -f requirements.yml && ansible-galaxy install -r requirements.yml --force || echo "No requirements.yml; skipping."
         '''
       }
@@ -38,7 +38,7 @@ pipeline {
           string(credentialsId: 'mac-become-password', variable: 'BECOME_PASSWORD')
         ]) {
           sh '''
-            set -euo pipefail
+            set -eu pipefail
             ansible-playbook main.yml \
               --inventory inventory \
               --private-key "${SSH_KEY_FILE}" \
