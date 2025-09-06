@@ -22,6 +22,7 @@ pipeline {
   }
   parameters {
     string(name: 'TAGS', defaultValue: '', description: 'Optional Ansible tags (comma-separated)')
+    string(name: 'SKIP_TAGS', defaultValue: 'osx,sublime-text', description: 'Ansible tags to skip (ignored if TAGS is set)')
     booleanParam(name: 'CHECK_MODE', defaultValue: false, description: 'Run with --check (dry run)')
   }
   stages {
@@ -96,7 +97,8 @@ pipeline {
               --extra-vars "ansible_python_interpreter=/usr/bin/python3" \
               --ssh-common-args "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
               ${CHECK_MODE:+--check} \
-              ${TAGS:+--tags "${TAGS}"}
+              ${TAGS:+--tags "${TAGS}"} \
+              ${TAGS:+} ${TAGS:-${SKIP_TAGS:+--skip-tags "${SKIP_TAGS}"}}
 
             # Clean up
             ssh-agent -k || true
