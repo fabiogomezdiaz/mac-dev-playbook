@@ -91,7 +91,6 @@ pipeline {
             # Run playbook (no need for --private-key since it's in SSH agent)
             ansible-playbook main.yml \
               --inventory inventory \
-              --become --become-user root \
               --become-password-file "${BECOME_PASS_FILE}" \
               --diff \
               --extra-vars "ansible_python_interpreter=/usr/bin/python3" \
