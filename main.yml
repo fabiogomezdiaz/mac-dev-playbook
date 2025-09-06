@@ -39,9 +39,9 @@
       when: configure_terminal
       tags: ['terminal']
 
-    # - import_tasks: tasks/osx.yml
-    #   when: configure_osx
-    #   tags: ['osx']
+    - import_tasks: tasks/osx.yml
+      when: configure_osx
+      tags: ['osx']
 
     - import_tasks: tasks/extra-packages.yml
       tags: ['extra-packages']
@@ -54,9 +54,9 @@
         executable: "{{ item.executable | default(omit) }}"
       loop: "{{ gem_packages }}"
 
-    # - import_tasks: tasks/sublime-text.yml
-    #   when: configure_sublime
-    #   tags: ['sublime-text']
+    - import_tasks: tasks/sublime-text.yml
+      when: configure_sublime
+      tags: ['sublime-text']
 
     - name: Run post-provision task files in a block.
       tags: ['post']
