@@ -3,7 +3,6 @@ configure_dotfiles: true
 configure_terminal: true
 configure_osx: true
 
-<<<<<<< HEAD
 # Set to 'true' to configure the Dock via dockutil.
 configure_dock: false
 dockitems_remove: []
@@ -17,14 +16,6 @@ dockitems_persist: []
 
 configure_sudoers: false
 sudoers_custom_config: ""
-=======
-configure_dotfiles: true
-configure_terminal: true
-configure_osx: true
-
-configure_sudoers: false
-sudoers_custom_config: ''
->>>>>>> dd88f44 (Fix lint issues and dump Travis CI. Try out GitHub Actions instead.)
 # Example:
 # sudoers_custom_config: |
 #   # Allow users in admin group to use sudo with no password.
