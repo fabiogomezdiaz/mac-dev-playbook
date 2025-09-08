@@ -80,11 +80,9 @@ pipeline {
 
             # Preflight: Ansible connectivity check
             echo "Testing Ansible connectivity..."
-            SSH_ARGS="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
             ansible all -m ping \
               --inventory inventory \
               --become-password-file "${BECOME_PASS_FILE}" \
-              --ssh-common-args "${SSH_ARGS}" \
               --extra-vars "ansible_python_interpreter=/usr/bin/python3"
             echo "Ansible connectivity check passed."
 
