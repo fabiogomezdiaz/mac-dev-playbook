@@ -80,11 +80,7 @@ pipeline {
 
             # Preflight: Ansible connectivity check
             echo "Testing Ansible connectivity..."
-            ansible all \
-              --inventory inventory \
-              --become-password-file "${BECOME_PASS_FILE}" \
-              --ssh-common-args "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
-              -m ping
+            ansible all -m ping
 
             # Run playbook (no need for --private-key since it's in SSH agent)
             # Build tag arguments conditionally
