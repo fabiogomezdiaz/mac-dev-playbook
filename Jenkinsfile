@@ -78,14 +78,6 @@ pipeline {
             printf '%s' "${BECOME_PASSWORD}" > "${BECOME_PASS_FILE}"
             chmod 600 "${BECOME_PASS_FILE}"
 
-            # Preflight: Ansible connectivity check
-            echo "Testing Ansible connectivity..."
-            ansible all -m ping \
-              --inventory inventory \
-              --become-password-file "${BECOME_PASS_FILE}" \
-              --extra-vars "ansible_python_interpreter=/usr/bin/python3"
-            echo "Ansible connectivity check passed."
-
             # Run playbook (no need for --private-key since it's in SSH agent)
             # Build tag arguments conditionally
             TAG_ARGS=""
