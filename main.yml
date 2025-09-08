@@ -31,6 +31,10 @@
     #- import_tasks: tasks/oh-my-zsh.yml
     #  tags: ['oh-my-zsh']
 
+    - import_tasks: tasks/rbenv.yml
+      when: configure_rbenv
+      tags: ['rbenv']
+
     - import_tasks: tasks/sudoers.yml
       when: configure_sudoers
       tags: ['sudoers']
@@ -45,14 +49,6 @@
 
     - import_tasks: tasks/extra-packages.yml
       tags: ['extra-packages']
-    - name: Install global Ruby gems.
-      gem:
-        name: "{{ item.name | default(item) }}"
-        state: "{{ item.state | default('present') }}"
-        version: "{{ item.version | default(omit) }}"
-        user_install: false
-        executable: "{{ item.executable | default(omit) }}"
-      loop: "{{ gem_packages }}"
 
     - import_tasks: tasks/sublime-text.yml
       when: configure_sublime

@@ -1,0 +1,27 @@
+---
+- name: Install rbenv via Homebrew
+  homebrew:
+    name: rbenv
+    state: present
+  tags: ['rbenv']
+
+- name: Install Ruby {{ ruby_version }} via rbenv
+  command: "{{ ansible_env.HOME }}/.rbenv/bin/rbenv install {{ ruby_version }}"
+  environment:
+    PATH: "{{ rbenv_path }}"
+  args:
+    creates: "{{ ansible_env.HOME }}/.rbenv/versions/{{ ruby_version }}"
+  tags: ['rbenv']
+
+- name: Set Ruby {{ ruby_version }} as global version
+  command: "{{ ansible_env.HOME }}/.rbenv/bin/rbenv global {{ ruby_version }}"
+  environment:
+    PATH: "{{ rbenv_path }}"
+  tags: ['rbenv']
+
+- name: Install bundler gem
+  gem:
+    name: bundler
+    state: present
+    executable: "{{ ansible_env.HOME }}/.rbenv/versions/{{ ruby_version }}/bin/gem"
+  tags: ['rbenv']
