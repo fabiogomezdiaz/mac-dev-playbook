@@ -78,23 +78,30 @@ pipeline {
             printf '%s' "${BECOME_PASSWORD}" > "${BECOME_PASS_FILE}"
             chmod 600 "${BECOME_PASS_FILE}"
 
-            # Preflight: SSH connectivity check with host key verification disabled
-            echo "Testing SSH connectivity..."
-            for host in mbpmax.fabiongo.com macminim4.fabiongo.com; do
-              echo "Testing connection to $host..."
-              ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=10 "${SSH_USER}@${host}" "echo 'SSH connection successful to $host'" || {
-                echo "SSH connection failed to $host"
-                exit 1
-              }
-            done
+            # Preflight: Ansible connectivity check
+            echo "Testing Ansible connectivity..."
+            ansible all \
+              --inventory inventory \
+              --become-password-file "${BECOME_PASS_FILE}" \
+              --ssh-common-args "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
+              -m ping
 
             # Run playbook (no need for --private-key since it's in SSH agent)
+            # Build tag arguments conditionally
+            TAG_ARGS=""
+            if [ -n "${TAGS}" ]; then
+              TAG_ARGS="--tags ${TAGS}"
+            else
+              TAG_ARGS="--skip-tags ${SKIP_TAGS}"
+            fi
+
             ansible-playbook main.yml \
               --inventory inventory \
               --become-password-file "${BECOME_PASS_FILE}" \
               --diff \
               --extra-vars "ansible_python_interpreter=/usr/bin/python3" \
-              --ssh-common-args "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+              --ssh-common-args "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
+              ${TAG_ARGS}
 
             # Clean up
             ssh-agent -k || true
