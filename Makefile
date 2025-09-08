@@ -34,6 +34,13 @@ all-dotfiles:
 	@time ansible-playbook $(PLAYBOOK) --inventory=$(INVENTORY) --ask-become-pass --tags dotfiles
 	@echo "Playbook execution completed."
 
+tags:
+	@echo "Enter tags (comma separated):"
+	@read -p "" tags; \
+	echo "Running playbook..."; \
+	time ansible-playbook $(PLAYBOOK) --inventory=$(INVENTORY) --ask-become-pass --tags $$tags; \
+	echo "Playbook execution completed."
+
 ########
 # HOME #
 ########

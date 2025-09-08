@@ -5,42 +5,21 @@
     state: present
   tags: ['rbenv']
 
-# - name: Install ruby-build via Homebrew
-#   homebrew:
-#     name: ruby-build
-#     state: present
-#   tags: ['rbenv']
-
-# - name: Add rbenv to shell profile
-#   lineinfile:
-#     path: "{{ ansible_env.HOME }}/.zshrc"
-#     line: 'export PATH="$HOME/.rbenv/bin:$PATH"'
-#     create: yes
-#   tags: ['rbenv']
-
-# - name: Add rbenv init to shell profile
-#   lineinfile:
-#     path: "{{ ansible_env.HOME }}/.zshrc"
-#     line: 'eval "$(rbenv init -)"'
-#     create: yes
-#   tags: ['rbenv']
-
-- name: Set rbenv environment variables
-  set_fact:
-    rbenv_path: "{{ ansible_env.HOME }}/.rbenv/bin:{{ ansible_env.PATH }}"
+- name: Add rbenv init to shell profile
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: 'eval "$(rbenv init -)"'
+    create: yes
+  tags: ['rbenv']
 
 - name: Install Ruby {{ ruby_version }} via rbenv
-  command: "{{ ansible_env.HOME }}/.rbenv/bin/rbenv install {{ ruby_version }}"
-  environment:
-    PATH: "{{ rbenv_path }}"
+  command: "/opt/homebrew/bin/rbenv install {{ ruby_version }}"
   args:
     creates: "{{ ansible_env.HOME }}/.rbenv/versions/{{ ruby_version }}"
   tags: ['rbenv']
 
 - name: Set Ruby {{ ruby_version }} as global version
-  command: "{{ ansible_env.HOME }}/.rbenv/bin/rbenv global {{ ruby_version }}"
-  environment:
-    PATH: "{{ rbenv_path }}"
+  command: "/opt/homebrew/bin/rbenv global {{ ruby_version }}"
   tags: ['rbenv']
 
 - name: Install bundler gem
