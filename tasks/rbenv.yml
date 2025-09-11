@@ -5,13 +5,6 @@
     state: present
   tags: ['rbenv']
 
-- name: Add rbenv init to shell profile
-  lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    line: 'eval "$(rbenv init -)"'
-    create: yes
-  tags: ['rbenv']
-
 - name: Install Ruby {{ ruby_version }} via rbenv
   command: "/opt/homebrew/bin/rbenv install {{ ruby_version }}"
   args:
