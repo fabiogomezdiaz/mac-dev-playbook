@@ -21,7 +21,10 @@
     - role: geerlingguy.mac.mas
       environment:
         PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_env.PATH }}"
-      when: mas_installed_apps or mas_installed_app_ids
+      # Newer Ansible requires `when:` to evaluate to a boolean (not a list via Python's `or`).
+      when: >
+        (mas_installed_apps | default([]) | length > 0) or
+        (mas_installed_app_ids | default([]) | length > 0)
       tags: ['mas']
     - role: geerlingguy.mac.dock
       when: configure_dock

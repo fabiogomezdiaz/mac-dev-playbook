@@ -25,6 +25,8 @@ dotfiles_repo: https://github.com/geerlingguy/dotfiles.git
 dotfiles_repo_accept_hostkey: true
 dotfiles_repo_local_destination: ~/Development/GitHub/dotfiles
 dotfiles_repo_version: master # Replace with your default branch
+# Set to true if you want Ansible to overwrite local changes in the dotfiles repo destination.
+dotfiles_repo_force: false
 dotfiles_files:
   - .zshrc
   - .gitignore
@@ -78,6 +80,7 @@ homebrew_cask_apps:
 
 # See `geerlingguy.mac.mas` role documentation for usage instructions.
 mas_installed_apps: []
+mas_installed_app_ids: []
 mas_email: ""
 mas_password: ""
 
