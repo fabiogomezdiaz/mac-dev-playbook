@@ -15,7 +15,6 @@ pipeline {
   options { ansiColor('xterm'); timestamps() }
   environment {
     ANSIBLE_CONFIG = "${WORKSPACE}/ansible.cfg"
-    ANSIBLE_STDOUT_CALLBACK = 'yaml'
     ANSIBLE_FORCE_COLOR = 'true'
     // Belt & suspenders: make sure common bins are on PATH
     PATH = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${PATH}"
