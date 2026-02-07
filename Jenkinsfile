@@ -22,6 +22,7 @@ pipeline {
   parameters {
     string(name: 'TAGS', defaultValue: '', description: 'Optional Ansible tags (comma-separated)')
     string(name: 'SKIP_TAGS', defaultValue: 'osx,sublime-text', description: 'Ansible tags to skip (ignored if TAGS is set)')
+    booleanParam(name: 'DEBUG', defaultValue: false, description: 'Run ansible-playbook with -vvv for verbose debugging (e.g. to see which cask is installing when it hangs)')
   }
   stages {
     stage('Checkout') {
@@ -86,13 +87,19 @@ pipeline {
               TAG_ARGS="--skip-tags ${SKIP_TAGS}"
             fi
 
+            # Optional verbose debugging
+            VERBOSE_ARGS=""
+            if [ "${DEBUG}" = "true" ]; then
+              VERBOSE_ARGS="-vvv"
+            fi
+
             ansible-playbook main.yml \
               --inventory inventory \
               --become-password-file "${BECOME_PASS_FILE}" \
               --diff \
               --extra-vars "ansible_python_interpreter=/usr/bin/python3" \
               --ssh-common-args "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
-              ${TAG_ARGS}
+              ${TAG_ARGS} ${VERBOSE_ARGS}
 
             # Clean up
             ssh-agent -k || true

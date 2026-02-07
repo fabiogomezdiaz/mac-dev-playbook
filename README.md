@@ -51,6 +51,39 @@ You can filter which part of the provisioning process to run by specifying a set
 
     ansible-playbook main.yml -K --tags "dotfiles,homebrew"
 
+### Debugging the Homebrew Cask task (when it hangs)
+
+The task **"Install configured cask applications"** runs `brew install --cask` for each item in `homebrew_cask_apps` in sequence. It can appear to hang when:
+
+- A cask has a large download or slow installer (e.g. Microsoft Office, Adobe, Docker Desktop).
+- A cask opens a GUI or asks for input (license, login, etc.).
+- The first cask that needs to be installed is the one that blocks.
+
+**Ways to debug:**
+
+1. **See which cask is running** – use high verbosity so each loop item is visible:
+   ```bash
+   ansible-playbook main.yml -K --tags homebrew -vvv
+   ```
+   When it hangs, check the last "item=" in the output; that’s the cask currently being installed.
+
+2. **Start at the cask task** – skip earlier tasks and go straight to casks:
+   ```bash
+   ansible-playbook main.yml -K --tags homebrew --start-at-task "Install configured cask applications"
+   ```
+
+3. **Test with a single cask** – override the list to isolate the problematic one:
+   ```bash
+   ansible-playbook main.yml -K --tags homebrew -e '{"homebrew_cask_apps": ["vlc"]}'
+   ```
+   Replace `vlc` with one cask at a time from your list to find which one hangs.
+
+4. **Run the install on the Mac directly** – SSH to the target host and run:
+   ```bash
+   /opt/homebrew/bin/brew install --cask <cask_name>
+   ```
+   If it prompts for input or takes a long time, that’s the cause; consider installing that cask manually or excluding it from the playbook.
+
 ## Overriding Defaults
 
 Not everyone's development environment and preferred software configuration is the same.
